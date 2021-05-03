@@ -33,3 +33,12 @@ input {
   margin: 1rem!important;
   width: 70%!important;
 }
+
+i {
+  color: #de1010;
+  line-height: 1.2!important;
+}
+
+p {
+  display: inline!important;
+}
