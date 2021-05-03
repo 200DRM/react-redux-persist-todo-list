@@ -1,4 +1,21 @@
-import { useState } from 'react';
+import { 
+  useCallback,
+  useState 
+} from 'react';
+
+const TaskItem = (
+  { onDelete, task }
+) => {
+  return (
+    <div className='col-md-10 d-flex justify-content-end'>
+      <p className='px-2'>{task}</p>
+      <i 
+        className="far fa-trash-alt"
+        onClick={onDelete}
+      ></i>
+    </div>
+  );
+};
 
 const Main = () => {
 
@@ -12,12 +29,20 @@ const Main = () => {
     setTaskName('');
   };
 
+  const deleteTask = useCallback((currentTask) => {
+    if (currentTask) {
+      const filteredArray = taskList.filter(task => task !== currentTask);
+      setTaskList([...filteredArray]);
+    }
+  }, [taskList]); 
+
   const taskListContent = taskList.map((task) => {
     return (
-      <div className='col-md-10 d-flex justify-content-end'>
-        <p className='px-2'>{task}</p>
-        <i class="far fa-trash-alt"></i>
-      </div>
+      <TaskItem
+        onDelete={() => deleteTask(task)} 
+        key={task}
+        task={task}
+      />
     );
   });
 
