@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { 
-  useCallback,
-  useState 
-} from 'react';
+  useDispatch,
+  useSelector 
+} from 'react-redux';
 
 const TaskItem = (
   { onDelete, task }
@@ -19,22 +20,25 @@ const TaskItem = (
 
 const Main = () => {
 
-  const [taskList, setTaskList] = useState([]);
+  const dispatch = useDispatch();
+  const taskList = useSelector(store => store.taskItems);
+
   const [taskName, setTaskName] = useState('');
 
   const addTask = () => {
-    if (taskName) {
-      setTaskList([...taskList, taskName]);
-    }
+    taskName && dispatch({
+      type: 'ADD_TASK',
+      payload: taskName
+    });
     setTaskName('');
   };
 
-  const deleteTask = useCallback((currentTask) => {
-    if (currentTask) {
-      const filteredArray = taskList.filter(task => task !== currentTask);
-      setTaskList([...filteredArray]);
-    }
-  }, [taskList]); 
+  const deleteTask = (task) => {
+    task && dispatch({
+      type: 'DELETE_TASK',
+      payload: task
+    });
+  };
 
   const taskListContent = taskList.map((task) => {
     return (
@@ -62,7 +66,9 @@ const Main = () => {
             <button
               className='btn btn-primary'
               onClick={addTask}
-            >ADD</button>
+            >
+              ADD
+            </button>
           </div>
           {taskListContent}
         </div>
